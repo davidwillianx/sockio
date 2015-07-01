@@ -2,6 +2,7 @@ var http = require('http');
 var express = require('express');
 var logger = require('morgan');
 var path  = require('path');
+var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
@@ -21,6 +22,7 @@ app.set('views egine', 'ejs ');
 app.set('port', process.env.PORT || 8080);
 
 app.use(logger('dev'));
+app.use(favicon(__dirname+'/app/public/imgs/chat.ico'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(cookieParser());
