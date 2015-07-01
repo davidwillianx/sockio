@@ -6,6 +6,7 @@ var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var passport = require('passport');
 
 //waiting for passport and socket.io
 
@@ -17,15 +18,17 @@ var ini = require('./app/routes/index');
 var app = express();
 
 app.set('views',path.join(__dirname,'app/views'));
-app.set('views egine', 'ejs ');
+app.set('views engine', 'ejs ');
 
-app.set('port', process.env.PORT || 8080);
+app.set('port', process.env.PORT || 3000);
 
 app.use(logger('dev'));
 app.use(favicon(__dirname+'/app/public/imgs/chat.ico'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(session({
     secret: 'youshouldbebetterasfasterasyoucan',
     resave: true,
@@ -39,8 +42,37 @@ app.use('/user',user);
 
 app.use(express.static(__dirname+'/app/public'));
 
+app.use(function(req,res,next){
+  var error  = new Error('Not found');
+  error.status = 404;
+  next(error);
+});
+//If we are on development evironment
+if(app.get('env') === 'development'){
+  app.use(function(req,res,next){
+    res.status(error.status || 500);
+    res.render('error',{
+      message: error.message,
+      error : error
+    });
+  });
+}
+
+//Production
+app.use(function(req,res,next){
+  res.status(error.status || 500);
+  res.render('error', {
+    message: error.message,
+    error: {}
+  });
+});
+
 var server = http.createServer(app);
 
 server.listen(app.get('port'),function(){
   console.log('Server running');
+});
+
+server.on('error',function(error){
+    throw error;
 });

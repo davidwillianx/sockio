@@ -1,0 +1,13 @@
+.access {
+  margin-top: 180px;
+  /*padding: 5px;*/
+}
+
+@media (max-width: 480px) {
+  .access{
+    margin-top: 0;
+  }
+  .shadow-z-2{
+    box-shadow: none;
+  }
+}
