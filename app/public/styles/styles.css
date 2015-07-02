@@ -11,3 +11,12 @@
     box-shadow: none;
   }
 }
+
+.pages {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    z-index: 4;
+    padding: 0px;
+    overflow: auto;
+}

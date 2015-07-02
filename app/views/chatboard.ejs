@@ -1,12 +1,66 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>
-        Welcome <%= user.nickname %>
-    </title>
-  </head>
+  <% include head %>
   <body>
-      CHat 
+    <div class="header-panel"style="background-color: #009587;
+      height: 144px; position: relative;"></div>
+      <div class="container-fluid main">
+        <div class="row">
+          <div class="pages col-lg-9" style="z-index:4;position:absolute;height: 100%;">
+            <div class="col-lg-8 well" style="height: 90%; margin: 2% 0;">
+              <div class="col-lg-4" style="display:block; height: 90%;">
+                <div class="col-lg-12" style="height: 10%">
+                  SearchBox
+                </div>
+                <div class="col-lg-12" style="overflow-y: scroll; height: 90%">
+                  <ul>
+                    <li>
+                      <div class="img">img</div>
+                      <div class="des">description</div>
+                    </li>
+                    <li>
+                      <div class="img">img</div>
+                      <div class="des">description</div>
+                    </li>
+                    <li>
+                      <div class="img">img</div>
+                      <div class="des">description</div>
+                    </li>
+                    <li>
+                      <div class="img">img</div>
+                      <div class="des">description</div>
+                    </li>
+                    <li>
+                      <div class="img">img</div>
+                      <div class="des">description</div>
+                    </li>
+                    <li>
+                      <div class="img">img</div>
+                      <div class="des">description</div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-lg-8" style="height: 90%;">
+                dsa
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
   </body>
+
+
+
+  <style media="screen">
+  .pages {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      z-index: 4;
+      padding: 0px;
+      overflow: auto;
+    }
+  </style>
 </html>
