@@ -8,10 +8,16 @@
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.3.0/css/material-fullpalette.css" media="screen" title="no title" charset="utf-8"/>
     <link rel="stylesheet" href="styles/styles.css" media="screen" title="no title" charset="utf-8">
-    <title> <%= tomato %></title>
+    <title> <%= message %></title>
   </head>
   <body>
     <div class="container-fluid">
+      <% if(message.length > 0){%>
+        <div class="bs-component">
+          <div class="alert alert-warning"><%= message %></div>
+        </div>
+
+      <%}%>
       <div class="row">
         <div class="col-lg-5 col-lg-offset-4 col-md-12 ">
             <div class="access shadow-z-2 col-lg-9 col-lg-offset-1 col-md-12 " >
@@ -20,7 +26,7 @@
                   <!-- <h3>Dados de Acesso</h3> -->
                   <img src="/imgs/chat.ico" alt="" />
                 </legend>
-                <form action="/" methond="post">
+                <form action="/user/connect" method="post">
                   <div class="form-group">
                     <label for="email">Email:</label>
                     <input class="form-control" type="text" name="email" placeholder="YOUR EMAIL">
@@ -28,6 +34,10 @@
                   <div class="form-group">
                     <label for="password">Password:</label>
                     <input class="form-control" type="password" name="password" placeholder="YOUR PASSWORD">
+                  </div>
+                  <div class="form-group">
+                    <label for="nick">Nickname:</label>
+                    <input class="form-control" type="text" name="nickname" placeholder="CHAT NICKNAME">
                   </div>
                   <div class="col-lg-4 col-lg-offset-4 col-xs-6 con-xs-offset-3">
                       <input class="btn btn-primary" type="submit" value="Entrar"/>

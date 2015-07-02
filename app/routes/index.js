@@ -3,7 +3,7 @@ var router = express.Router();
 
 
 router.get('/',function(req,res){
-  res.render('index.ejs',{tomato: 'David'});
+  res.render('index',{message: req.flash('accessproblems')});
 });
 
 module.exports = router;
