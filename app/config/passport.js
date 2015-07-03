@@ -29,16 +29,16 @@ module.exports = function(passport){
   },function(req,email,password,done){
   process.nextTick(function(){
         if(!req.user)
-          User.findOne({'email': email},function(error, user){
+          User.findOne({'local.email': email},function(error, user){
             if(error)
               return done(error);
             if(user)
                done(null,user);
             else{
               var newUser = new User();
-              newUser.email = email;
-              newUser.nickname = req.body.nickname;
-              newUser.password = newUser.generateHash(password);
+              newUser.local.email = email;
+              newUser.local.nickname = req.body.nickname;
+              newUser.local.password = newUser.generateHash(password);
               newUser.save(function(error){
                 if(error)
                   throw error;
@@ -65,9 +65,10 @@ module.exports = function(passport){
           else {
             faceUser = new User();
             faceUser.facebook.id = profile.id;
-            faceUser.facebook.toke = accessToken;
+            faceUser.facebook.token = accessToken;
             faceUser.facebook.email = profile.emails[0].value,
             faceUser.facebook.picture = profile.photos[0].value
+            faceUser.facebook.name = profile.name.givenName+ ' '+profile.name.familyName;
             faceUser.save(function (error){
                 if(error)
                   throw error;
