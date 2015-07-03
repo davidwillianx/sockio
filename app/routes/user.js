@@ -9,13 +9,20 @@ module.exports = function(app,passport){
         failureRedirect: '/',
         failureFlash: true
       }));
-      
-  app.get('/user/chatboard',isAutheticated,function(req,res){
+
+  app.get('/user/chatboard',isAuthenticated,function(req,res){
     res.render('chatboard',{user: req.user});
   });
+
+  app.get('/auth/facebook/',passport.authenticate('facebook'));
+  app.get('/auth/facebook/callback',passport.authenticate('facebook',{
+    successRedirect: '/user/chatboard',
+    failureRedirect: '/',
+    failureFlash: true
+  }));
 };
 
-function isAutheticated(req,res,next){
+function isAuthenticated(req,res,next){
   if(req.isAuthenticated())
     return next();
   res.redirect('/');

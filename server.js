@@ -26,7 +26,7 @@ var app = express();
 app.set('views',path.join(__dirname,'app/views'));
 app.set('view engine', 'ejs');
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8080);
 
 app.use(logger('dev'));
 app.use(favicon(__dirname+'/app/public/imgs/chat.ico'));
