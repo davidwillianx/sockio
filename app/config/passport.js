@@ -33,7 +33,7 @@ module.exports = function(passport){
             if(error)
               return done(error);
             if(user)
-               done(null,user);
+               return done(null,user);
             else{
               var newUser = new User();
               newUser.local.email = email;
@@ -42,7 +42,7 @@ module.exports = function(passport){
               newUser.save(function(error){
                 if(error)
                   throw error;
-                done(null, newUser);
+                return done(null, newUser);
               });
             }
           });
@@ -72,7 +72,7 @@ module.exports = function(passport){
             faceUser.save(function (error){
                 if(error)
                   throw error;
-                done(null,faceUser);
+                return done(null,faceUser);
             });
           }
       });

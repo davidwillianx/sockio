@@ -66,8 +66,13 @@
                 </div>
                 <div class="col-lg-8" style="height: 90%;">
                   <div class="row">
-                    <div class="col-lg-12">CHat box</div>
-                    <div class="col-lg-12">tex</div>
+                    <div class="col-lg-12" id="textM">CHat box</div>
+                    <div class="col-lg-12">
+                      <form action="" id="text-emit">
+                        <input type="text" name="type-gap" placeholder="share you ideas">
+                        <button id="shareUp" class="btn btn-success">send</button>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -75,6 +80,28 @@
           </div>
         </div>
       </div>
+      <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+      <script type="text/javascript">
+        var io = io.connect('http://localhost:8080');
+        var textbox = document.getElementById('textM');
+        io.on('welcome',function(first){
+
+        });
+        var el = document.getElementById('text-emit').children;
+
+        el[0].onkeydown = function(e){
+          if(e.keyCode === 13){
+            io.emit('group-message',{text: el[0].value});
+            el[0].value = '';
+            e.preventDefault();
+          }
+        };
+        io.on('group-message',function (message) {
+          textbox.innerHtml += message.text;
+        });
+
+
+      </script>
   </body>
 
 

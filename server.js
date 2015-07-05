@@ -82,7 +82,9 @@ server.listen(app.get('port'),function(){
 });
 
 io.on('connect',function(client){
-  
+  client.on('group-message',function(message){
+    client.broadcast.emit('group-message',message);
+  });
 });
 
 server.on('error',function(error){
