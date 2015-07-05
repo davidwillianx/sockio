@@ -74,9 +74,15 @@ app.use(function(req,res,next){
 });
 
 var server = http.createServer(app);
+var io = require('socket.io')(server);
+
 
 server.listen(app.get('port'),function(){
   console.log('Server running');
+});
+
+io.on('connect',function(client){
+  
 });
 
 server.on('error',function(error){
