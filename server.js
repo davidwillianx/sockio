@@ -75,16 +75,10 @@ app.use(function(req,res,next){
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
-
+require('./app/lib/io.js')(io);
 
 server.listen(app.get('port'),function(){
   console.log('Server running');
-});
-
-io.on('connect',function(client){
-  client.on('group-message',function(message){
-    client.broadcast.emit('group-message',message);
-  });
 });
 
 server.on('error',function(error){

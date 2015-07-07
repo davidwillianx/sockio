@@ -66,8 +66,10 @@
                 </div>
                 <div class="col-lg-8" style="height: 90%;">
                   <div class="row">
-                    <div class="col-lg-12" id="textM">CHat box</div>
-                    <div class="col-lg-12">
+                    <div class="col-lg-12" style="min-height: 10; max-height: 10;" id="textM">
+                              sss
+                    </div>
+                    <div class="col-lg-12" >
                       <form action="" id="text-emit">
                         <input type="text" name="type-gap" placeholder="share you ideas">
                         <button id="shareUp" class="btn btn-success">send</button>
@@ -82,22 +84,33 @@
       </div>
       <script src="/socket.io/socket.io.js" charset="utf-8"></script>
       <script type="text/javascript">
-        var io = io.connect('http://localhost:8080');
+        var io = io.connect('http://192.168.1.151:8080');
         var textbox = document.getElementById('textM');
+        var shareButton = document.getElementById('shareUp');
         io.on('welcome',function(first){
-
+          //loadPreviousMessage
         });
         var el = document.getElementById('text-emit').children;
 
         el[0].onkeydown = function(e){
           if(e.keyCode === 13){
-            io.emit('group-message',{text: el[0].value});
+            io.emit('broadcast request',{text: el[0].value});
             el[0].value = '';
             e.preventDefault();
           }
         };
-        io.on('group-message',function (message) {
-          textbox.innerHtml += message.text;
+
+        shareButton.onclick = function(e){
+          e.preventDefault();
+            if(el[0].value.length > 0){
+              io.emit('broadcast request',{text: el[0].value});
+              el[0].value = 0;
+            }
+        };
+
+
+        io.on('broadcast response',function (message) {
+          document.getElementById('textM').innerHTML +='<br>'+ message.text;
         });
 
 
