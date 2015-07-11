@@ -2,11 +2,15 @@
   "name": "sockio",
   "version": "0.0.1",
   "description": "firt time using both (express/sockio) on node",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test"
   },
-  "author": "@davidwillianx",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidwillianx/sockio.git"
+  },
+  "author": "David Willian @davidwillianx",
   "license": "ISC",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
@@ -23,5 +27,10 @@
     "passport-local": "^1.0.0",
     "serve-favicon": "^2.3.0",
     "socket.io": "^1.3.5"
+  },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "mocha": "^2.2.5",
+    "supertest": "^1.0.1"
   }
 }

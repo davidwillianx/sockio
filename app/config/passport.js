@@ -9,7 +9,6 @@ var User = require('../modules/user');
 
 //authze
 var Auth = require('./auth.js');
-
 module.exports = function(passport){
 
   passport.serializeUser(function(user,done){

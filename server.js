@@ -13,7 +13,7 @@ var mongoose = require('mongoose');
 var mongoAuth = require('./app/config/mongooseauth');
 mongoose.connect(mongoAuth.url);
 
-
+console.log(process.env.FACEBOOK_ID);
 //waiting for passport and socket.io
 
 require('./app/config/passport')(passport);
@@ -41,7 +41,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-
 
 app.use('/',ini);
 require('./app/routes/user')(app,passport);
@@ -79,8 +78,4 @@ require('./app/lib/io.js')(io);
 
 server.listen(app.get('port'),function(){
   console.log('Server running');
-});
-
-server.on('error',function(error){
-    throw error;
 });
