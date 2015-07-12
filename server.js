@@ -13,7 +13,6 @@ var mongoose = require('mongoose');
 var mongoAuth = require('./app/config/mongooseauth');
 mongoose.connect(mongoAuth.url);
 
-console.log(process.env.FACEBOOK_ID);
 //waiting for passport and socket.io
 
 require('./app/config/passport')(passport);
@@ -74,8 +73,16 @@ app.use(function(req,res,next){
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
-require('./app/lib/io.js')(io);
+//require('./app/lib/io.js')(io);
+
+io.on('connection', function (client) {
+  console.log('connected');
+  client.on('broadcast request',function (msg) {
+    console.log('TUdo OK');
+    io.emit('broadcast response',{status: 'ok', message: 'tudo ok'})
+  });
+});
 
 server.listen(app.get('port'),function(){
-  console.log('Server running');
+  console.log('Server running' + app.get('port'));
 });

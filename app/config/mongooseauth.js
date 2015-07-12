@@ -1,4 +1,4 @@
 
 module.exports = {
-  'url': process.env.MONGO_CONNECT
+  'url': process.env.MONGO_CONNECTION
 };

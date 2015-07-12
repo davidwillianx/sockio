@@ -2,12 +2,12 @@
 module.exports = function(io){
 
   io.on('connect',function(client){
-    //emitLoadPreviousMessages
+    console.log('Connection');
 
-    client.on('broadcast request',function(message) {
-      client.broadcast.emit('broadcast response',message);
-    });
-
-    
+    client.on('broadcast request',function (message) {
+      console.log(message);
+      client.emit('broadcast response',{status: 'ok', message: 'hurdue'});
+    })
   });
+
 }
