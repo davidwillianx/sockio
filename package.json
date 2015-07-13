@@ -4,7 +4,7 @@
   "description": "firt time using both (express/sockio) on node",
   "main": "server.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha  test -R nyan"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
     "ejs": "^2.3.2",
     "express": "^4.13.0",
     "express-session": "^1.11.3",
+    "material-design-lite": "^1.0.0-3",
     "mongoose": "^4.0.6",
     "morgan": "^1.6.0",
     "passport": "^0.2.2",

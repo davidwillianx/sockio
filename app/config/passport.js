@@ -34,6 +34,7 @@ module.exports = function(passport){
             if(user)
                return done(null,user);
             else{
+              //bodyValidation
               var newUser = new User();
               newUser.local.email = email;
               newUser.local.nickname = req.body.nickname;
