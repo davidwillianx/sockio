@@ -4,13 +4,13 @@ var mongoose  = require('mongoose');
 var should = require('chai').should();
 var expect = require('chai').expect;
 
+mongoose.connect('mongodb://localhost/sockio');
+var Message = require('../app/modules/message');
 
 
 
  describe('websocket chat transactions', function() {
    var ioClient;
-   mongoose.connect('mongodb://localhost/sockio');
-   var Message = require('../app/modules/message');
    var User = require('../app/modules/user');
 
    before(
@@ -18,13 +18,6 @@ var expect = require('chai').expect;
        User.remove().exec();
        Message.remove().exec();
        done();
-     },
-     function (done) {
-       var newMsg = new Message();
-       newMsg.author = 'Test';
-       newMsg.msg = 'Something may it workg';
-       newMsg.time = null;
-       newMsg.save(done);
      },
      function (done) {
         var userChato = {
@@ -43,13 +36,19 @@ var expect = require('chai').expect;
    );
 
    describe('startUp', function() {
+     before(
+       function (done) {
+         require('./messageMkp')(Message,done);
+       }
+     );
      it('should be connected', function(done){
        ioClient = client('http://localhost:8080');
-       ioClient.on('previous-messages',function(messages) {
+       ioClient.on('previous-messages',function(messages){
          expect(messages).not.to.be.null;
          expect(messages.length).to.equal(3);
          done();
        });
      });
+
    });
  });

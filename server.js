@@ -14,8 +14,6 @@ var Message = require('./app/modules/message');
 var mongoAuth = require('./app/config/mongooseauth');
 mongoose.connect(mongoAuth.url);
 
-//waiting for passport and socket.io
-
 require('./app/config/passport')(passport);
 
 var user = require('./app/routes/user');
