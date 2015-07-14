@@ -10,6 +10,7 @@ var passport = require('passport');
 var flash = require('connect-flash');
 var mongoose = require('mongoose');
 
+var Message = require('./app/modules/message');
 var mongoAuth = require('./app/config/mongooseauth');
 mongoose.connect(mongoAuth.url);
 
@@ -73,7 +74,7 @@ app.use(function(req,res,next){
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
-require('./app/lib/io.js')(io);
+require('./app/lib/io.js')(io,Message);
 
 server.listen(app.get('port'),function(){
   console.log('Server running' + app.get('port'));
