@@ -9,10 +9,20 @@ var session = require('express-session');
 var passport = require('passport');
 var flash = require('connect-flash');
 var mongoose = require('mongoose');
+var MongoStore = require('connect-mongostore')(session);
+
 
 var Message = require('./app/modules/message');
 var mongoAuth = require('./app/config/mongooseauth');
 mongoose.connect(mongoAuth.url);
+
+var sessionMdw = session({
+    key: 'sockiothenewmessager4everyone',
+    secret: 'youshouldbebetterasfasterasyoucan',
+    resave: true,
+    store: new MongoStore({'db': 'sockio'}) ,
+    saveUninitialized: true
+});
 
 require('./app/config/passport')(passport);
 
@@ -31,11 +41,7 @@ app.use(favicon(__dirname+'/app/public/imgs/chat.ico'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(cookieParser());
-app.use(session({
-    secret: 'youshouldbebetterasfasterasyoucan',
-    resave: true,
-    saveUninitialized: true
-}));
+app.use(sessionMdw);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -72,7 +78,13 @@ app.use(function(req,res,next){
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
-require('./app/lib/io.js')(io,Message);
+io.use(function (socket,next) {
+    console.log('binding both sessions passport and sokIo');
+    sessionMdw(socket.request, {}, next);
+}).on('connection',function (client) {
+    console.log(client.request.session);
+});
+//require('./app/lib/io.js')(io,Message);
 
 server.listen(app.get('port'),function(){
   console.log('Server running' + app.get('port'));

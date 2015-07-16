@@ -8,6 +8,8 @@ module.exports = function(io,Message){
   */
 
   io.on('connect',function(client){
+    var clientId = client.request.session.passport;
+    console.log(clientId);
       Message.find({},function (error,prevMessage) {
         if(!error)
           client.emit('previous-messages',prevMessage);
