@@ -17,7 +17,7 @@ var mongoAuth = require('./app/config/mongooseauth');
 mongoose.connect(mongoAuth.url);
 
 var sessionMdw = session({
-    key: 'sockiothenewmessager4everyone',
+    name: 'sockiothenewmessager4everyone',
     secret: 'youshouldbebetterasfasterasyoucan',
     resave: true,
     store: new MongoStore({'db': 'sockio'}) ,
@@ -79,10 +79,9 @@ app.use(function(req,res,next){
 var server = http.createServer(app);
 var io = require('socket.io')(server);
 io.use(function (socket,next) {
-    console.log('binding both sessions passport and sokIo');
     sessionMdw(socket.request, {}, next);
 }).on('connection',function (client) {
-    console.log(client.request.session);
+  console.log(client.request.session);
 });
 //require('./app/lib/io.js')(io,Message);
 

@@ -56,7 +56,6 @@ module.exports = function(passport){
     profileFields: ['id', 'name','picture.type(large)', 'emails', 'displayName', 'about', 'gender'],
     passReqToCallback: true
   },function(req, accessToken, refreshToken, profile,done){
-      console.log(profile);
       User.findOne({'facebook.id': profile.id},function(error, faceUser){
           if(error)
             return done(error);
