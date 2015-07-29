@@ -1,46 +1,53 @@
-var http = require('http');
 var express = require('express');
+var Server = require('http').Server;
 var logger = require('morgan');
 var path  = require('path');
 var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
+var cookie = require('cookie');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var passport = require('passport');
 var flash = require('connect-flash');
 var mongoose = require('mongoose');
-var MongoStore = require('connect-mongostore')(session);
-
-
+require('dotenv').load();
+var MongoStore = require('connect-mongo')(session);
+var mongoStore = new MongoStore({url : process.env.MONGO_CONNECT});
 var Message = require('./app/modules/message');
 var mongoAuth = require('./app/config/mongooseauth');
 mongoose.connect(mongoAuth.url);
 
-var sessionMdw = session({
-    name: 'sockiothenewmessager4everyone',
-    secret: 'youshouldbebetterasfasterasyoucan',
-    resave: true,
-    store: new MongoStore({'db': 'sockio'}) ,
-    saveUninitialized: true
-});
 
 require('./app/config/passport')(passport);
-
 var user = require('./app/routes/user');
 var ini = require('./app/routes/index');
 
+var sessionMdw = session({
+    name: process.env.SESSION_NAME ,
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    store: mongoStore,
+    saveUninitialized: true,
+    cookie: {
+       path: '/',
+       httpOnly: true,
+       secure: false,
+       maxAge: null
+   }
+});
+
 var app = express();
+var server = Server(app);
 
 app.set('views',path.join(__dirname,'app/views'));
 app.set('view engine', 'ejs');
-
 app.set('port', process.env.PORT || 8080);
 
 app.use(logger('dev'));
 app.use(favicon(__dirname+'/app/public/imgs/chat.ico'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
-app.use(cookieParser());
+app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(sessionMdw);
 app.use(passport.initialize());
 app.use(passport.session());
@@ -76,15 +83,28 @@ app.use(function(req,res,next){
   });
 });
 
-var server = http.createServer(app);
-var io = require('socket.io')(server);
-io.use(function (socket,next) {
-    sessionMdw(socket.request, {}, next);
-}).on('connection',function (client) {
-  console.log(client.request.session);
-});
-//require('./app/lib/io.js')(io,Message);
 
-server.listen(app.get('port'),function(){
-  console.log('Server running' + app.get('port'));
+server.listen(app.get('port'),function () {
+  console.log('listen in a new way');
 });
+var io = require('socket.io')(server);
+
+io.use(function (socket,next) {
+  console.log('io.use');
+  var userData = socket.request || socket.handshake;
+  cookieParser(process.env.SESSION_SECRET)(socket.request,{},function (error) {
+     var sid = socket.request.signedCookies[process.env.SESSION_NAME];
+     mongoStore.get(sid,function (error, session) {
+       if(error) next(new Error('User is no authenticated'));
+       socket.request.session = session;
+       passport.initialize()(socket.request,{},function () {
+         passport.session()(socket.request,{},function () {
+            if(socket.request.user)next(null,true)
+            else next(new Error('User is not autheticate'));
+         });
+       });
+     });
+  });
+});
+
+require('./app/lib/io')(io, Message);

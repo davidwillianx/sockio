@@ -1,8 +1,10 @@
 var expect = require('chai').expect;
 var should = require('chai').should();
-var mongoose = require('mongoose');
-var request = require('supertest')('http://localhost:8080');
-
+var User = require('../app/modules/user');
+// var app = require('../server').server;
+var app = 'http://localhost:8080';
+var request = require('supertest');
+require('dotenv').load();
 
 describe('user access', function() {
   var sockPaths = {
@@ -12,20 +14,22 @@ describe('user access', function() {
 
   before(
     function (done){
-      request.get('/')
+      request(app)
+      .get('/')
       .expect(200)
       .expect('Content-Type','text/html; charset=utf-8')
       .end(function (error,res) {
         expect(error).not.exist;
         done();
-    }),
-    function(done){
-      mongoose.connect('http://localhost:8080');
-      //drop user collection
-    }
+    });
+  });
+  after(function (done) {
+    User.remove().exec();
+    done();
   });
   it('should not have dashboard access', function(done) {
-      request.get(sockPaths.dashboard)
+      request(app)
+      .get(sockPaths.dashboard)
       .expect(302)
       .end(function(error,res){
         should.not.exist(error);
@@ -33,14 +37,14 @@ describe('user access', function() {
         done();
       });
   });
-
   it('should not have login', function(done) {
     var userUnauthorized = {
         'email':'test@testmail.com'
         // ,'password': 'testamazing'
         //,'nickname': 'nickloadeon'
       };
-    request.post(sockPaths.authentication)
+    request(app)
+    .post(sockPaths.authentication)
     .send(userUnauthorized)
     .expect(302)
     .end(function (error, res) {
@@ -55,7 +59,8 @@ describe('user access', function() {
       'password':'test',
       'nickname': 'chato'
     };
-    request.post(sockPaths.authentication)
+    request(app)
+    .post(sockPaths.authentication)
     .send(userAuthorized)
     .expect(302)
     .end(function (error, res) {
