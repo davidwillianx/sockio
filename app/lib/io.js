@@ -9,8 +9,6 @@ module.exports = function(io,Message){
   */
 
   io.on('connection',function(client){
-    console.log('new session user');
-    console.log(client.request.session);
     Message.find({},function (error, messages) {
       if(error) client.emit('error',{message: 'previous-messages would get back any data, plz wait a minut'});
       client.emit('previous-messages',messages);

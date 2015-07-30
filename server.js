@@ -94,8 +94,10 @@ io.use(function (socket,next) {
   var userData = socket.request || socket.handshake;
   cookieParser(process.env.SESSION_SECRET)(socket.request,{},function (error) {
      var sid = socket.request.signedCookies[process.env.SESSION_NAME];
+     if(!sid) return next(new Error('User is not authenticated'));
+
      mongoStore.get(sid,function (error, session) {
-       if(error) next(new Error('User is no authenticated'));
+       if(error) next(new Error('User not found'));
        socket.request.session = session;
        passport.initialize()(socket.request,{},function () {
          passport.session()(socket.request,{},function () {
@@ -108,3 +110,5 @@ io.use(function (socket,next) {
 });
 
 require('./app/lib/io')(io, Message);
+
+module.exports = app;

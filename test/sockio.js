@@ -1,76 +1,87 @@
-var client = require('socket.io-client');
 var request = require('supertest');
-var mongoose  = require('mongoose');
+var requestAgnt = require('request');
 var should = require('chai').should();
 var expect = require('chai').expect;
-// var app = require('../server');
-var app = 'http://localhost:8080';
+var mongoose  = require('mongoose');
+var app = require('../server');
+
+var xhr = require('./xhtml');
 var User = require('../app/modules/user');
 var Message = require('../app/modules/message');
-
 require('dotenv').load();
 
 describe('websocket chat transactions', function() {
- var ioClient;
+ var pathURL = 'http://192.168.1.151:8080';
 
- before(
-   function (done) {
+  before(function (done) {
      mongoose.connection.close();
      mongoose.connect(process.env.MONGO_CONNECT);
      User.remove().exec();
      Message.remove().exec();
      done();
-   },
-   function(done) {
-      var userChato = {
-        'email': 'test@test.com',
-        'password':'test',
-        'nickname': 'chato'
-      };
-      request(app)
-      .post('/user/connect')
-      .send(userChato)
-      .expect(302)
-      .end(function (error, res){
-        expect(res.header.location).to.equal('/user/chatboard');
-        done();
-      });
-    }
-  );
+   });
+
   after(function (done) {
-   mongoose.connection.close();
-   done();
+    mongoose.connection.close();
+    done();
   });
+
+  beforeEach(function (done) {
+    console.log('acessFeature');
+    var cookies = requestAgnt.jar();
+
+    requestAgnt.get({
+      url: pathURL,
+      jar: cookies
+    },function (error, res, body) {
+        should.not.exist.error;
+
+        requestAgnt.post({
+          url: pathURL+'/user/connect',
+          jar: cookies,
+          form:{
+            email: 'chat@chato.com',
+            password: 'imchatuser',
+            nickname: 'chatUserTestFirstReq'
+          }
+        },function (error, res, body) {
+          should.not.exist.error;
+          expect(res.statusCode).to.be.equal(302);
+          expect(res.headers.location).to.be.equal('/user/chatboard');
+
+          xhr.cbs.setAccess = function () {
+            this.setDisableHeaderCheck(true);
+            var stdOpen = this.open;
+            this.open = function () {
+              stdOpen.apply(this, arguments);
+              this.setRequestHeader('Cookie', res.request.headers.cookie);
+            }
+          }
+          done();
+        });
+    });
+  });
+
 /*
    Online List
    Messages come in / out
    Emojis
 */
- describe('Message socket', function() {
-   before(function (done) {
-     Message.remove().exec();
-     User.remove().exec();
-      require('./messageMkp')(Message,done);
-   });
-   after(function (done) {
-     User.remove().exec();
-     done();
-   });
-   it('should be connected', function(done){
-     request(app)
-     .post('/user/connect')
-     .send({email: 'chat@test.com', password: 'chat309', nickname: 'thor'})
-     .expect(302)
-     .end(function (error,res) {
-       expect(res.header.location).to.be.equal('/user/chatboard');
-       ioClient = client('http://192.168.1.151:8080');
-      //  ioClient.on('previous-messages',function (messages) {
-      //    console.log(messages);
-      //    expect(messages.length).to.be.equal(3);
-      //    done();
-      //  });
+
+ it('should have websocket connection', function(done) {
+    var ioClient = require('socket.io-client')(pathURL,{forceNew: true});
+    ioClient.disconnect();
+    done();
+ });
+ it('should connect and get 3 previous messages', function(done) {
+    require('./messageMkp')(Message,function (error) {
+      should.not.exist.error;
+      var ioClient = require('socket.io-client')(pathURL,{forceNew: true});
+      ioClient.on('previous-messages', function (messages) {
+        expect(messages.length).to.be.equal(3);
+        ioClient.disconnect();
         done();
       });
     });
-  });
+ });
 });

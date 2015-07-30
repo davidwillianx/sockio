@@ -1,8 +1,8 @@
 var expect = require('chai').expect;
 var should = require('chai').should();
 var User = require('../app/modules/user');
-// var app = require('../server').server;
-var app = 'http://localhost:8080';
+var app = require('../server');
+// var app = 'http://localhost:8080';
 var request = require('supertest');
 require('dotenv').load();
 
