@@ -18,6 +18,9 @@ var mongoAuth = require('./app/config/mongooseauth');
 mongoose.connect(mongoAuth.url);
 
 
+
+
+
 require('./app/config/passport')(passport);
 var user = require('./app/routes/user');
 var ini = require('./app/routes/index');
@@ -86,6 +89,7 @@ app.use(function(req,res,next){
 
 server.listen(app.get('port'),function () {
   console.log('listen in a new way');
+
 });
 var io = require('socket.io')(server);
 
@@ -108,6 +112,7 @@ io.use(function (socket,next) {
      });
   });
 });
+
 
 require('./app/lib/io')(io, Message);
 

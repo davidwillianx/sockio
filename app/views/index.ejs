@@ -1,49 +1,47 @@
 <!DOCTYPE html>
 <html>
-  <!-- <% include head %> -->
-  <body>
-    <div class="container-fluid">
-      <% if(message.length > 0){%>
-        <div class="bs-component">
-          <div class="alert alert-warning"><%= message %></div>
-        </div>
+	<head>
+	 <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>talk freely</title>
+		<link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.indigo-pink.min.css">
+		<script src="https://storage.googleapis.com/code.getmdl.io/1.0.2/material.min.js"></script>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" href="styles/styles.css">
 
-      <%}%>
-      <div class="row">
-        <div class="col-lg-5 col-lg-offset-4 col-md-12 ">
-            <div class="access shadow-z-2 col-lg-9 col-lg-offset-1 col-md-12 " >
-              <fieldset>
-                <legend class="text-center">
-                  <!-- <h3>Dados de Acesso</h3> -->
-                  <img src="/imgs/chat.ico" alt="" />
-                </legend>
-                <form action="/user/connect" method="post">
-                  <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input class="form-control" type="text" name="email" placeholder="YOUR EMAIL">
-                  </div>
-                  <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input class="form-control" type="password" name="password" placeholder="YOUR PASSWORD">
-                  </div>
-                  <div class="form-group">
-                    <label for="nick">Nickname:</label>
-                    <input class="form-control" type="text" name="nickname" placeholder="CHAT NICKNAME">
-                  </div>
-                  <div class="col-lg-4 col-lg-offset-4 col-xs-6 con-xs-offset-3">
-                      <input class="btn btn-primary" type="submit" value="Entrar"/>
-                      <p><a href="/register">Registro rapido</a></p>
-                  </div>
-                </form>
-              </fieldset>
-            </div>
-            <div class="  text-center col-lg-7 col-lg-offset-2 col-md-8 col-md-offset-2">
-                <a href="/auth/facebook" class="btn btn-info" type="submit">Facebook</a>
-                <a href="/auth/github" disabled="disabled" class="btn btn-primary" type="submit">GitHub</a>
-            </div>
-	    </div>
-      </div>
-    </div>
+	</head>
+	<body>
+		<div class="layout-transparent mdl-layout mdl-js-layout">
+			<header class="mdl-layout__header mdl-layout__header--transparent">
+			     <div class="mdl-layout__header-row">
+			     <span class="mdl-layout-title">Talk more</span>
+				<div class="mdl-layout-spacer"></div>
+				<nav class="mdl-navigation">
+					<a class="mdl-navigation__link" href="">user</a>
+					<a class="mdl-navigation__link" href="">superH</a>
+					<a class="mdl-navigation__link" href="">superHeros</a>
+					<a class="mdl-navigation__link" href="">activity</a>
+				</nav>
+				</div>
+			</header>
+			<div class="mdl-layout__drawer">
+				<span class="mdl-layout-title">Talk</span>
+				<nav class="mdl-navigation">
+					<a class="mdl-navigation__link" href="">user</a>
+					<a class="mdl-navigation__link" href="">superH</a>
+					<a class="mdl-navigation__link" href="">superHeros</a>
+					<a class="mdl-navigation__link" href="">activity</a>
+				</nav>
+			</div>
+			<main class="mdl-layout__content">
+			<div class="mdl-grid">
+			   <div class="mdl-cell mdl-cell--3-col"></div>
+			   <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--4dp">
+			   </div> 
+			</div>
+			
+			</main>
+		</div>
 
-  </body>
+	</body>
+
 </html>
