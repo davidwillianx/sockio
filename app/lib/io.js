@@ -16,7 +16,6 @@ module.exports = function(io,Message){
   });
 
   io.on('error',function (client) {
-    console.log('Auth problem');
     io.diseconnect(client);
   });
 }

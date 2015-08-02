@@ -89,12 +89,10 @@ app.use(function(req,res,next){
 
 server.listen(app.get('port'),function () {
   console.log('listen in a new way');
-
 });
 var io = require('socket.io')(server);
 
 io.use(function (socket,next) {
-  console.log('io.use');
   var userData = socket.request || socket.handshake;
   cookieParser(process.env.SESSION_SECRET)(socket.request,{},function (error) {
      var sid = socket.request.signedCookies[process.env.SESSION_NAME];
